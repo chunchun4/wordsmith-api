@@ -46,7 +46,7 @@ pipeline{
         stage("Upload jar to Nexus"){
             steps{
                 script{
-                    def componentVersion = getVersion()
+                    def componentVersion = getVersion(3.3.0)
                     nexusArtifactUploader(
                         nexusVersion: 'nexus3',
                         protocol: 'http',
