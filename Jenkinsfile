@@ -43,31 +43,31 @@ pipeline{
                 // echo "sonar passed"
             }
         }
+        stage("Upload jar to Nexus"){
+            steps{
+                script{
+                    def componentVersion = getVersion()
+                    nexusArtifactUploader(
+                        nexusVersion: 'nexus3',
+                        protocol: 'http',
+                        nexusUrl: '16.171.54.244:8081',
+                        groupId: 'com.example',
+                        version: componentVersion,
+                        repository: 'maven-releases',
+                        credentialsId: 'nexus-token',
+                        artifacts: [
+                            [artifactId: 'words',
+                            classifier: '',
+                            file: "${WORKSPACE}/target/words.jar",
+                            type: 'jar']
+                        ]
+                    )
+                    // echo "pushed artifact"
+                }
+            }
+        }
     }
 }
-//         stage("Upload jar to Nexus"){
-//             steps{
-//                 script{
-//                     def componentVersion = getVersion()
-//                     // nexusArtifactUploader(
-//                     //     nexusVersion: 'nexus3',
-//                     //     protocol: 'http',
-//                     //     nexusUrl: '3.138.155.75:8081',
-//                     //     groupId: 'com.example',
-//                     //     version: componentVersion,
-//                     //     repository: 'maven-releases',
-//                     //     credentialsId: 'nexus-creds',
-//                     //     artifacts: [
-//                     //         [artifactId: 'words',
-//                     //         classifier: '',
-//                     //         file: "${WORKSPACE}/target/words.jar",
-//                     //         type: 'jar']
-//                     //     ]
-//                     // )
-//                     echo "pushed artifact"
-//                 }
-//             }
-//         }
 //         stage("Docker build and Push"){
 //             steps{
 //                 script{
