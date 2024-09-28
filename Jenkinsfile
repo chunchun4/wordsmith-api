@@ -46,7 +46,7 @@ pipeline{
         stage("Upload jar to Nexus"){
             steps{
                 script{
-                    def componentVersion = getVersion(3.3.0)
+                    def componentVersion = getVersion()
                     nexusArtifactUploader(
                         nexusVersion: 'nexus3',
                         protocol: 'http',
@@ -67,7 +67,6 @@ pipeline{
             }
         }
     }
-}
 //         stage("Docker build and Push"){
 //             steps{
 //                 script{
@@ -109,16 +108,16 @@ pipeline{
 //     }
 // }
 
-// def getVersion(){
-//     def pom = readMavenPom file: 'pom.xml'
-//     def baseVersion = pom.version
-//     def finalVersion
-//     if(env.BRANCH_NAME == "develop"){
-//         finalVersion = "${baseVersion}-rc"
-//     }else if(env.BRANCH_NAME == "main"){
-//         finalVersion = baseVersion
-//     }else{
-//         finalVersion = "${baseVersion}-${BUILD_NUMBER}-${env.BRANCH_NAME}"
-//     }
-//     return finalVersion
-// }
+def getVersion(){
+    def pom = readMavenPom file: 'pom.xml'
+    def baseVersion = pom.version
+    def finalVersion
+    if(env.BRANCH_NAME == "develop"){
+        finalVersion = "${baseVersion}-rc"
+    }else if(env.BRANCH_NAME == "main"){
+        finalVersion = baseVersion
+    }else{
+        finalVersion = "${baseVersion}-${BUILD_NUMBER}-${env.BRANCH_NAME}"
+    }
+    return finalVersion
+}
